@@ -5,6 +5,7 @@ import { fetchProperty } from "@/utils/request";
 import Link from "next/link";
 import PropertyHeaderImage from "@/components/PropertyHeaderImage";
 import PropertyDetails from "@/components/PropertyDetails";
+import { FaArrowLeft } from "react-icons/fa";
 
 const PropertyPage = () => {
   const { id } = useParams();
@@ -47,7 +48,8 @@ const PropertyPage = () => {
                 href={"/properties"}
                 className="text-blue-500 hover:text-blue-600 flex items-center"
               >
-                <i className="fas fa-arrow-left mr-2"></i> Back to Properties
+                <FaArrowLeft className="mr-2" />
+                Back to Properties
               </Link>
             </div>
           </section>
