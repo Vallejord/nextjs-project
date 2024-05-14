@@ -24,14 +24,12 @@ async function fetchProperties({ showFeatured = false } = {}) {
   }
 }
 
-// Fetch single property
 async function fetchProperty(id) {
   try {
-    // Handle the case where the domain is not available yet
+    //handle the case where domain is not available yet
     if (!apiDomain) {
       return null;
     }
-
     const res = await fetch(`${apiDomain}/properties/${id}`);
 
     if (!res.ok) {
