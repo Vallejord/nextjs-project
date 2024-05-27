@@ -17,7 +17,7 @@ const PropertyAddForm = () => {
     beds: "",
     baths: "",
     square_feet: "",
-    amenities: ["Free Parking"],
+    amenities: [],
     rates: {
       weekly: "",
       monthly: "",
@@ -35,13 +35,75 @@ const PropertyAddForm = () => {
     setMounted(true);
   }, []);
 
-  const handleChange = () => {};
-  const handleAmenitiesChange = () => {};
-  const handleImageChange = () => {};
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name.includes(".")) {
+      const [outerKey, innerKey] = name.split(".");
+
+      console.log(outerKey, innerKey);
+
+      setFields((prevFields) => ({
+        ...prevFields,
+        [outerKey]: { ...prevFields[outerKey], [innerKey]: value },
+      }));
+    } else {
+      setFields((prevFields) => ({
+        ...prevFields,
+        [name]: value,
+      }));
+    }
+  };
+
+  const handleAmenitiesChange = (e) => {
+    const { value, checked } = e.target;
+
+    //clone the current array
+    const updatedAmenities = [...fields.amenities];
+
+    if (checked) {
+      // add value to array
+      updatedAmenities.push(value);
+    } else {
+      //remove value from array
+      const index = updatedAmenities.indexOf(value);
+
+      if (index !== -1) {
+        updatedAmenities.splice(index, 1);
+      }
+    }
+    //update state withupdated array
+    //update the state with updated array
+    setFields((prevFields) => ({
+      ...prevFields,
+      amenities: updatedAmenities,
+    }));
+  };
+
+  const handleImageChange = (e) => {
+    const { files } = e.target;
+
+    //clones images array
+    const updatedImages = [...fields.images];
+
+    for (const file of files) {
+      updatedImages.push(file);
+    }
+
+    //updated state with array of images
+    setFields((prevFields) => ({
+      ...prevFields,
+      images: updatedImages,
+    }));
+  };
 
   return (
     mounted && (
-      <form>
+      <form
+        action="/api/properties"
+        method="POST"
+        encType="multipart/form-data"
+      >
         <h2 className="text-3xl text-center font-semibold mb-6">
           Add Property
         </h2>
@@ -54,7 +116,7 @@ const PropertyAddForm = () => {
             id="type"
             name="type"
             className="border rounded w-full py-2 px-3"
-            required
+            // required
             value={fields.type}
             onChange={handleChange}
           >
@@ -78,7 +140,7 @@ const PropertyAddForm = () => {
             className="border rounded w-full py-2 px-3 mb-2"
             placeholder="eg. Beautiful Apartment In Miami"
             required
-            value={fields.type}
+            value={fields.name}
             onChange={handleChange}
           />
         </div>
@@ -95,7 +157,7 @@ const PropertyAddForm = () => {
             className="border rounded w-full py-2 px-3"
             rows="4"
             placeholder="Add an optional description of your property"
-            value={fields.type}
+            value={fields.description}
             onChange={handleChange}
           ></textarea>
         </div>
